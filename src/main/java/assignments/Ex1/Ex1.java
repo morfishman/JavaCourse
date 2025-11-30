@@ -69,17 +69,51 @@ public class Ex1 {
 	 * @param yy
 	 * @return an array of doubles representing the coefficients of the polynom.
 	 */
-	public static double[] PolynomFromPoints(double[] xx, double[] yy) {
-		double [] ans = null;
-		int lx = xx.length;
-		int ly = yy.length;
-		if(xx!=null && yy!=null && lx==ly && lx>1 && lx<4) {
-		/** add you code below
 
-		/////////////////// */
+	/** Pseudocode:
+     *  if 2 points:
+     *      compute slope a and intercept b
+     *  if 3 points:
+     *      compute quadratic coefficients a, b, c
+     *  else:
+     *      return null
+     */
+	public static double[] PolynomFromPoints(double[] xx, double[] yy) {
+		if (xx == null || yy == null || xx.length != yy.length || xx.length < 2 || xx.length > 3) {
+			return null;
 		}
+
+		int n = xx.length;
+		double[] ans;
+
+		if (n == 2) {
+			double x0 = xx[0], x1 = xx[1];
+			double y0 = yy[0], y1 = yy[1];
+
+			if (Double.compare(x0, x1) == 0) return null;
+
+			double a = (y1 - y0) / (x1 - x0);
+			double b = y0 - a * x0;
+
+			ans = new double[]{a, b};
+
+		} else {
+			double x0 = xx[0], x1 = xx[1], x2 = xx[2];
+			double y0 = yy[0], y1 = yy[1], y2 = yy[2];
+
+			double denom = (x0 - x1)*(x0 - x2)*(x1 - x2);
+			if (denom == 0) return null; 
+
+			double a = (x2 * (y1 - y0) + x1 * (y0 - y2) + x0 * (y2 - y1)) / denom;
+			double b = (x2 * x2 * (y0 - y1) + x1 * x1 * (y2 - y0) + x0 * x0 * (y1 - y2)) / denom;
+			double c = (x1 * x2 * (x1 - x2) * y0 + x2 * x0 * (x2 - x0) * y1 + x0 * x1 * (x0 - x1) * y2) / denom;
+
+			ans = new double[]{a, b, c};
+		}
+
 		return ans;
 	}
+
 	/** Two polynomials functions are equal if and only if they have the same values f(x) for n+1 values of x,
 	 * where n is the max degree (over p1, p2) - up to an epsilon (aka EPS) value.
 	 * @param p1 first polynomial function

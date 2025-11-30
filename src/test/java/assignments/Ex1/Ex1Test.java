@@ -32,6 +32,43 @@ class Ex1Test {
 		assertEquals(fx1, 4, Ex1.EPS);
 		assertEquals(fx2, 6, Ex1.EPS);
 	}
+
+
+	@Test
+	public void testLinear() {
+		double[] xx = {1, 3};
+		double[] yy = {2, 6}; // line: y = 2x
+		double[] expected = {2.0, 0.0};
+
+		double[] result = Ex1.PolynomFromPoints(xx, yy);
+		assertArrayEquals(expected, result, 1e-9);
+	}
+
+	@Test
+	public void testQuadratic() {
+		double[] xx = {1, 2, 3};
+		double[] yy = {2, 3, 6}; // y = x^2 - x + 2
+		double[] expected = {1.0, -2.0, 3.0};
+
+		double[] result = Ex1.PolynomFromPoints(xx, yy);
+		assertArrayEquals(expected, result, 1e-9);
+	}
+
+	@Test
+	public void testInvalidInput() {
+		// Less than 2 points
+		assertNull(Ex1.PolynomFromPoints(new double[]{1}, new double[]{2}));
+
+		// More than 3 points
+		assertNull(Ex1.PolynomFromPoints(new double[]{1,2,3,4}, new double[]{1,2,3,4}));
+
+		// Null arrays
+		assertNull(Ex1.PolynomFromPoints(null, new double[]{1,2}));
+		assertNull(Ex1.PolynomFromPoints(new double[]{1,2}, null));
+
+		// Vertical line for 2 points
+		assertNull(Ex1.PolynomFromPoints(new double[]{2,2}, new double[]{1,3}));
+	}
 	@Test
 	/**
 	 * Tests that p1(x) + p2(x) == (p1+p2)(x)
