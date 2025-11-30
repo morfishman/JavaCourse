@@ -120,13 +120,34 @@ public class Ex1 {
 	 * @param p2 second polynomial function
 	 * @return true iff p1 represents the same polynomial function as p2.
 	 */
-	public static boolean equals(double[] p1, double[] p2) {
-		boolean ans = true;
-        /** add you code below
 
-         /////////////////// */
-		return ans;
+	/* Pseudocode:
+     *  for x from 0 to max degree:
+     *      compute f1(x) and f2(x)
+     *      if |f1 - f2| > EPS:
+     *          return false
+     *  return true
+     */
+	public static boolean equals(double[] p1, double[] p2) {
+		int n = Math.max(p1.length, p2.length) - 1; 
+
+		double EPS = Ex1.EPS; // use the same EPS as tests
+		for (int x = 0; x <= n; x++) {
+			double y1 = 0;
+			double y2 = 0;
+			for (int i = 0; i < p1.length; i++) {
+				y1 += p1[i] * Math.pow(x, i);
+			}
+			for (int i = 0; i < p2.length; i++) {
+				y2 += p2[i] * Math.pow(x, i);
+			}
+			if (Math.abs(y1 - y2) > EPS) {
+				return false; 
+			}
+		}
+		return true; 
 	}
+
 
 	/** 
 	 * Computes a String representing the polynomial function.

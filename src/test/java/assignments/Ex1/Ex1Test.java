@@ -69,6 +69,27 @@ class Ex1Test {
 		// Vertical line for 2 points
 		assertNull(Ex1.PolynomFromPoints(new double[]{2,2}, new double[]{1,3}));
 	}
+
+
+	public void testEquals() {
+        double[] p1 = {2, -1, 1};   // x^2 - x + 2
+        double[] p2 = {2, -1, 1};
+        assertTrue(Ex1.equals(p1, p2));
+
+        double[] p3 = {1, 0, 1};    // x^2 + 1
+        assertFalse(Ex1.equals(p1, p3));
+
+        double[] p4 = {2, -1, 1, 0};
+        assertTrue(Ex1.equals(p1, p4));
+
+        double[] p5 = {0};
+        double[] p6 = {0, 0, 0};
+        assertTrue(Ex1.equals(p5, p6));
+
+        double[] p7 = {0.1 + 0.2, 0.3}; // 0.3 + 0.3*x
+        double[] p8 = {0.3, 0.3};
+        assertTrue(Ex1.equals(p7, p8));
+    }
 	@Test
 	/**
 	 * Tests that p1(x) + p2(x) == (p1+p2)(x)
