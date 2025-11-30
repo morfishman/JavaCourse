@@ -395,13 +395,73 @@ public class Ex1 {
 	 * @param p - a String representing polynomial function.
 	 * @return
 	 */
+	
+	/* Pseudocode:
+     *  split string into terms by +/-
+     *  parse coefficient and power for each term
+     *  accumulate into array
+     */
 	public static double[] getPolynomFromString(String p) {
-		double [] ans = ZERO;//  -1.0x^2 +3.0x +2.0
-        /** add you code below
+		if (p == null || p.trim().isEmpty()) return new double[]{0};
 
-         /////////////////// */
+		p = p.replace(" ", "");
+
+		java.util.List<String> terms = new java.util.ArrayList<>();
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < p.length(); i++) {
+			char c = p.charAt(i);
+			if ((c == '+' || c == '-') && sb.length() > 0) {
+				terms.add(sb.toString());
+				sb.setLength(0);
+			}
+			sb.append(c);
+		}
+		if (sb.length() > 0) terms.add(sb.toString());
+
+		java.util.Map<Integer, Double> coeffMap = new java.util.HashMap<>();
+		int maxPower = 0;
+
+		for (String term : terms) {
+			if (term.isEmpty()) continue;
+
+			double sign = 1.0;
+			if (term.charAt(0) == '-') {
+				sign = -1.0;
+				term = term.substring(1);
+			} else if (term.charAt(0) == '+') {
+				term = term.substring(1);
+			}
+
+			double coeff = 0.0;
+			int power = 0;
+
+			if (term.contains("x")) {
+				String[] parts = term.split("x");
+				if (parts[0].isEmpty()) coeff = 1.0;
+				else coeff = Double.parseDouble(parts[0]);
+
+				if (parts.length > 1 && parts[1].startsWith("^")) {
+					power = Integer.parseInt(parts[1].substring(1));
+				} else {
+					power = 1;
+				}
+			} else {
+				coeff = Double.parseDouble(term);
+				power = 0;
+			}
+
+			coeff *= sign;
+			coeffMap.put(power, coeffMap.getOrDefault(power, 0.0) + coeff);
+			maxPower = Math.max(maxPower, power);
+		}
+
+		double[] ans = new double[maxPower + 1];
+		for (int i = 0; i <= maxPower; i++) {
+			ans[i] = coeffMap.getOrDefault(i, 0.0);
+		}
 		return ans;
 	}
+
 	/**
 	 * This function computes the polynomial function which is the sum of two polynomial functions (p1,p2)
 	 * @param p1
