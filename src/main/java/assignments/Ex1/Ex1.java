@@ -468,13 +468,24 @@ public class Ex1 {
 	 * @param p2
 	 * @return
 	 */
+	
+	/* Pseudocode:
+     *  for each index i:
+     *      ans[i] = p1[i] + p2[i] (0 if missing)
+     */
 	public static double[] add(double[] p1, double[] p2) {
-		double [] ans = ZERO;//
-        /** add you code below
-
-         /////////////////// */
+		if (p1 == null || p2 == null) throw new IllegalArgumentException("Polynomials cannot be null.");
+		int len = Math.max(p1.length, p2.length);
+		double[] ans = new double[len];
+		for (int i = 0; i < len; i++) {
+			double c1 = (i < p1.length) ? p1[i] : 0.0;
+			double c2 = (i < p2.length) ? p2[i] : 0.0;
+			ans[i] = c1 + c2;
+		}
 		return ans;
 	}
+
+
 	/**
 	 * This function computes the polynomial function which is the multiplication of two polynoms (p1,p2)
 	 * @param p1
