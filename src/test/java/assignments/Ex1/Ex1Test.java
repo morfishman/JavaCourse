@@ -201,26 +201,29 @@ class Ex1Test {
 		assertTrue(Ex1.equals(dp4, dp3));
 	}
 	@Test
-	/** 
-	 * Tests the parsing of a polynom in a String like form.
-	 */
 	public void testFromString() {
-		double[] p = {-1.1,2.3,3.1}; // 3.1X^2+ 2.3x -1.1
+		double[] p = {-1.1, 2.3, 3.1};
 		String sp2 = "3.1x^2 +2.3x -1.1";
+
 		String sp = Ex1.poly(p);
+
 		double[] p1 = Ex1.getPolynomFromString(sp);
 		double[] p2 = Ex1.getPolynomFromString(sp2);
+
 		boolean isSame1 = Ex1.equals(p1, p);
 		boolean isSame2 = Ex1.equals(p2, p);
-		if(!isSame1) {fail();}
-		if(!isSame2) {fail();}
+
+		if (!isSame1) { fail("Parsing from generated string failed."); }
+		if (!isSame2) { fail("Parsing from manual string failed."); }
+
 		assertEquals(sp, Ex1.poly(p1));
 	}
+
 	@Test
 	/**
 	 * Tests the equality of pairs of arrays.
 	 */
-	public void testEquals() {
+	public void testEquals2() {
 		double[][] d1 = {{0}, {1}, {1,2,0,0}};
 		double[][] d2 = {Ex1.ZERO, {1+ Ex1.EPS/2}, {1,2}};
 		double[][] xx = {{-2* Ex1.EPS}, {1+ Ex1.EPS*1.2}, {1,2, Ex1.EPS/2}};
@@ -233,14 +236,25 @@ class Ex1Test {
 	}
 
 	@Test
-	/**
-	 * Tests is the sameValue function is symmetric.
-	 */
-	public void testSameValue2() {
-		double x1=-4, x2=0;
-		double rs1 = Ex1.sameValue(po1,po2, x1, x2, Ex1.EPS);
-		double rs2 = Ex1.sameValue(po2,po1, x1, x2, Ex1.EPS);
-		assertEquals(rs1,rs2, Ex1.EPS);
+	public void testSameValueSymmetry() {
+		double x1 = -4, x2 = 0;
+		double rs1 = Ex1.sameValue(po1, po2, x1, x2, Ex1.EPS);
+		double rs2 = Ex1.sameValue(po2, po1, x1, x2, Ex1.EPS);
+		assertEquals(rs1, rs2, Ex1.EPS);
+	}
+
+	@Test
+	public void testSameValueRootFound() {
+		double x1 = -3, x2 = 0; 
+		double x = Ex1.sameValue(po1, po2, x1, x2, Ex1.EPS);
+		assertTrue(Math.abs(Ex1.f(po1, x) - Ex1.f(po2, x)) < Ex1.EPS);
+	}
+
+	@Test
+	public void testSameValueIdenticalPolynomials() {
+		double x1 = 0, x2 = 5;
+		double x = Ex1.sameValue(po1, po1, x1, x2, Ex1.EPS);
+		assertTrue(x >= x1 && x <= x2);
 	}
 	@Test
 	/**

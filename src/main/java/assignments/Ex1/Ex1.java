@@ -209,13 +209,41 @@ public class Ex1 {
 	 * @param eps - epsilon (positive small value (often 10^-3, or 10^-6).
 	 * @return an x value (x1<=x<=x2) for which |p1(x) - p2(x)| < eps.
 	 */
-	public static double sameValue(double[] p1, double[] p2, double x1, double x2, double eps) {
-		double ans = x1;
-        /** add you code below
 
-         /////////////////// */
-		return ans;
+	/* Pseudocode:
+     *  use binary search:
+     *      mid = (x1 + x2)/2
+     *      compute f = p1(mid) - p2(mid)
+     *      if |f| < eps: return mid
+     *      else recurse on half with sign change
+     */
+	public static double sameValue(double[] p1, double[] p2, double x1, double x2, double eps) {
+		double f1 = f(p1, x1) - f(p2, x1);
+		double f2 = f(p1, x2) - f(p2, x2);
+
+		if (Math.abs(f1) < eps) return x1;
+		if (Math.abs(f2) < eps) return x2;
+
+		double mid = 0;
+
+		while ((x2 - x1) > eps) {
+			mid = (x1 + x2) / 2;
+			double fm = f(p1, mid) - f(p2, mid);
+
+			if (Math.abs(fm) < eps) return mid;
+
+			if (f1 * fm <= 0) {
+				x2 = mid;
+				f2 = fm;
+			} else {
+				x1 = mid;
+				f1 = fm;
+			}
+		}
+
+		return (x1 + x2) / 2;
 	}
+
 	/**
 	 * Given a polynomial function (p), a range [x1,x2] and an integer with the number (n) of sample points.
 	 * This function computes an approximation of the length of the function between f(x1) and f(x2) 
