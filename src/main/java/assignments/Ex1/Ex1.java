@@ -256,13 +256,35 @@ public class Ex1 {
 	 * @param numberOfSegments - (A positive integer value (1,2,...).
 	 * @return the length approximation of the function between f(x1) and f(x2).
 	 */
-	public static double length(double[] p, double x1, double x2, int numberOfSegments) {
-		double ans = x1;
-        /** add you code below
 
-         /////////////////// */
-		return ans;
+	/* Pseudocode:
+     *  divide [x1,x2] into n segments
+     *  sum sqrt((dx)^2 + (dy)^2) for each segment
+     */
+	public static double length(double[] p, double x1, double x2, int numberOfSegments) {
+		if (p == null || numberOfSegments <= 0) return 0.0;
+		if (x1 == x2) return 0.0;
+
+		if (x2 < x1) {
+			double tmp = x1; x1 = x2; x2 = tmp;
+		}
+
+		double dx = (x2 - x1) / numberOfSegments;
+		double prevX = x1;
+		double prevY = f(p, prevX);
+		double total = 0.0;
+
+		for (int i = 1; i <= numberOfSegments; i++) {
+			double curX = x1 + i * dx;
+			double curY = f(p, curX);
+			total += Math.hypot(curX - prevX, curY - prevY);
+			prevX = curX;
+			prevY = curY;
+		}
+
+		return total;
 	}
+
 	
 	/**
 	 * Given two polynomial functions (p1,p2), a range [x1,x2] and an integer representing the number of Trapezoids between the functions (number of samples in on each polynom).

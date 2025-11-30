@@ -256,7 +256,15 @@ class Ex1Test {
 		double x = Ex1.sameValue(po1, po1, x1, x2, Ex1.EPS);
 		assertTrue(x >= x1 && x <= x2);
 	}
+
 	@Test
+	public void testLengthLinear() {
+		double[] line = {0, 2}; // y = 2x
+		double L = Ex1.length(line, 0, 1, 100);
+		assertEquals(Math.hypot(1, 2), L, 1e-3);
+	}
+
+
 	/**
 	 * Test the area function - it should be symmetric.
 	 */
