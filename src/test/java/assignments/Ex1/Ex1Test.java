@@ -265,6 +265,7 @@ class Ex1Test {
 	}
 
 
+	@Test
 	/**
 	 * Test the area function - it should be symmetric.
 	 */
@@ -273,7 +274,7 @@ class Ex1Test {
 		double a1 = Ex1.area(po1, po2, x1, x2, 100);
 		double a2 = Ex1.area(po2, po1, x1, x2, 100);
 		assertEquals(a1,a2, Ex1.EPS);
-}
+	}
 	@Test
 	/**
 	 * Test the area f1(x)=0, f2(x)=x;

@@ -297,13 +297,96 @@ public class Ex1 {
 	 * @param numberOfTrapezoid - a natural number representing the number of Trapezoids between x1 and x2.
 	 * @return the approximated area between the two polynomial functions within the [x1,x2] range.
 	 */
-	public static double area(double[] p1,double[]p2, double x1, double x2, int numberOfTrapezoid) {
-		double ans = 0;
-        /** add you code below
 
-         /////////////////// */
-		return ans;
+	/* Pseudocode:
+     *  find all points where p1 - p2 changes sign
+     *  split interval at these roots
+     *  sum trapezoid areas in each interval
+     */
+	public static double area(double[] p1, double[] p2, double x1, double x2, int numberOfTrapezoid) {
+		if (p1 == null || p2 == null) throw new IllegalArgumentException("Null polynomial.");
+		if (p1.length == 0 || p2.length == 0) throw new IllegalArgumentException("Empty polynomial.");
+		if (Double.isNaN(x1) || Double.isNaN(x2)) throw new IllegalArgumentException("NaN range.");
+		if (numberOfTrapezoid <= 0) throw new IllegalArgumentException("numberOfTrapezoid must be > 0.");
+		if (x1 == x2) return 0.0;
+		if (x2 < x1) { double t = x1; x1 = x2; x2 = t; }
+
+		final double EPS = 1e-9;
+		final int N = numberOfTrapezoid;
+		java.util.ArrayList<Double> grid = new java.util.ArrayList<>(N + 32);
+		for (int k = 0; k <= N; k++) {
+			double xk = x1 + (x2 - x1) * k / N;
+			grid.add(xk);
+		}
+
+		java.util.ArrayList<Double> roots = new java.util.ArrayList<>();
+		double prevX = grid.get(0);
+		double prevD = f(p1, prevX) - f(p2, prevX);
+
+		for (int i = 1; i < grid.size(); i++) {
+			double currX = grid.get(i);
+			double currD = f(p1, currX) - f(p2, currX);
+
+			boolean signChange = (prevD == 0.0) || (currD == 0.0) || (prevD * currD < 0.0);
+			if (signChange && (currX - prevX) > EPS) {
+				double r = sameValue(p1, p2, prevX, currX, EPS);
+				if (r > prevX + EPS && r < currX - EPS) {
+					roots.add(r);
+				}
+			}
+			prevX = currX;
+			prevD = currD;
+		}
+		grid.addAll(roots);
+		java.util.Collections.sort(grid);
+
+		java.util.ArrayList<Double> xs = new java.util.ArrayList<>(grid.size());
+		for (double x : grid) {
+			if (xs.isEmpty() || Math.abs(x - xs.get(xs.size() - 1)) > 1e-12) {
+				xs.add(x);
+			}
+		}
+
+		boolean refined;
+		int safeGuard = 0;
+		do {
+			refined = false;
+			java.util.ArrayList<Double> insert = new java.util.ArrayList<>();
+			for (int i = 1; i < xs.size(); i++) {
+				double a = xs.get(i - 1), b = xs.get(i);
+				double da = f(p1, a) - f(p2, a);
+				double db = f(p1, b) - f(p2, b);
+				if ((da == 0.0 || db == 0.0 || da * db < 0.0) && (b - a) > EPS) {
+					double r = sameValue(p1, p2, a, b, EPS);
+					if (r > a + EPS && r < b - EPS) {
+						insert.add(r);
+						refined = true;
+					}
+				}
+			}
+			if (refined) {
+				xs.addAll(insert);
+				java.util.Collections.sort(xs);
+				java.util.ArrayList<Double> tmp = new java.util.ArrayList<>(xs.size());
+				for (double x : xs) {
+					if (tmp.isEmpty() || Math.abs(x - tmp.get(tmp.size() - 1)) > 1e-12) tmp.add(x);
+				}
+				xs = tmp;
+			}
+			safeGuard++;
+		} while (refined && safeGuard < 4); 
+		double area = 0.0;
+		for (int i = 1; i < xs.size(); i++) {
+			double a = xs.get(i - 1), b = xs.get(i);
+			double fa = Math.abs(f(p1, a) - f(p2, a));
+			double fb = Math.abs(f(p1, b) - f(p2, b));
+			area += (b - a) * (fa + fb) * 0.5;
+		}
+		return area;
 	}
+
+
+
 	/**
 	 * This function computes the array representation of a polynomial function from a String
 	 * representation. Note:given a polynomial function represented as a double array,
