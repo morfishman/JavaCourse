@@ -41,6 +41,18 @@ public class Ex1 {
 	 * @param eps - epsilon (positive small value (often 10^-3, or 10^-6).
 	 * @return an x value (x1<=x<=x2) for which |p(x)| < eps.
 	 */
+
+
+	 /**
+     * Pseudocode:
+     *  mid = (x1 + x2) / 2
+     *  if |f(mid)| < eps:
+     *      return mid
+     *  if f(x1)*f(mid) <= 0:
+     *      recurse on [x1, mid]
+     *  else:
+     *      recurse on [mid, x2]
+     */
 	public static double root_rec(double[] p, double x1, double x2, double eps) {
 		double f1 = f(p,x1);
 		double x12 = (x1+x2)/2;
