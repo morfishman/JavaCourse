@@ -90,6 +90,28 @@ class Ex1Test {
         double[] p8 = {0.3, 0.3};
         assertTrue(Ex1.equals(p7, p8));
     }
+
+
+	 public void testPoly() {
+        double[] p1 = {2, 0, 3.1, -1.2}; // -1.2x^3 +3.1x^2 +2.0
+        assertEquals("-1.2x^3 +3.1x^2 +2.0", Ex1.poly(p1));
+
+        double[] p2 = {0, 1, -1}; // -1x^2 +x
+        assertEquals("-x^2 +x", Ex1.poly(p2));
+
+        double[] p3 = {0, 0, 0};
+        assertEquals("0", Ex1.poly(p3));
+
+        double[] p4 = {-5};
+        assertEquals("-5.0", Ex1.poly(p4));
+
+        double[] p5 = {0, 0, 2};
+        assertEquals("2.0x^2", Ex1.poly(p5));
+
+        double[] p6 = {0, -1};
+        assertEquals("-x", Ex1.poly(p6));
+    }
+
 	@Test
 	/**
 	 * Tests that p1(x) + p2(x) == (p1+p2)(x)
@@ -102,6 +124,7 @@ class Ex1Test {
 		double f12x = Ex1.f(po12, x);
 		assertEquals(f1x + f2x, f12x, Ex1.EPS);
 	}
+
 	@Test
 	/**
 	 * Tests that p1+p2+ (-1*p2) == p1

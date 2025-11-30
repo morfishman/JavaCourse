@@ -155,16 +155,50 @@ public class Ex1 {
 	 * @param poly the polynomial function represented as an array of doubles
 	 * @return String representing the polynomial function:
 	 */
-	public static String poly(double[] poly) {
-		String ans = "";
-		if(poly.length==0) {ans="0";}
-		else {
-            /** add you code below
 
-             /////////////////// */
+		
+	/* Pseudocode:
+	*  for each term from high degree to low:
+	*      skip zero
+	*      append sign and coefficient
+	*      append x^power if needed
+	*  return string
+	*/
+	public static String poly(double[] poly) {
+		if (poly == null || poly.length == 0) return "0";
+
+		StringBuilder sb = new StringBuilder();
+		int n = poly.length - 1; 
+		boolean firstTerm = true;
+
+		for (int i = n; i >= 0; i--) {
+			double coef = poly[i];
+			if (Math.abs(coef) < 1e-9) continue;
+
+			if (coef > 0 && !firstTerm) {
+				sb.append(" +");
+			} else if (coef < 0) {
+				sb.append(firstTerm ? "-" : " -");
+			}
+
+			double absCoef = Math.abs(coef);
+
+			if (!(absCoef == 1 && i != 0)) {
+				sb.append(absCoef);
+			}
+
+			if (i >= 1) {
+				sb.append("x");
+				if (i > 1) sb.append("^").append(i);
+			}
+
+			firstTerm = false;
 		}
-		return ans;
+		if (sb.length() == 0) return "0";
+
+		return sb.toString();
 	}
+
 	/**
 	 * Given two polynomial functions (p1,p2), a range [x1,x2] and an epsilon eps. This function computes an x value (x1<=x<=x2)
 	 * for which |p1(x) -p2(x)| < eps, assuming (p1(x1)-p2(x1)) * (p1(x2)-p2(x2)) <= 0.
