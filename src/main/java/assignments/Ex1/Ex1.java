@@ -492,23 +492,46 @@ public class Ex1 {
 	 * @param p2
 	 * @return
 	 */
-	public static double[] mul(double[] p1, double[] p2) {
-		double [] ans = ZERO;//
-        /** add you code below
 
-         /////////////////// */
+	/* Pseudocode:
+     *  for each coefficient pair (i,j):
+     *      ans[i+j] += p[i] * q[j]
+     */
+	public static double[] mul(double[] p, double[] q) {
+		if (q.length == 1) { 
+			double[] ans = new double[p.length];
+			for (int i = 0; i < p.length; i++) {
+				ans[i] = p[i] * q[0];
+			}
+			return ans;
+		}
+		double[] ans = new double[p.length + q.length - 1];
+		for (int i = 0; i < p.length; i++) {
+			for (int j = 0; j < q.length; j++) {
+				ans[i + j] += p[i] * q[j];
+			}
+		}
 		return ans;
 	}
+
 	/**
 	 * This function computes the derivative of the p0 polynomial function.
 	 * @param po
 	 * @return
 	 */
-	public static double[] derivative (double[] po) {
-		double [] ans = ZERO;//
-        /** add you code below
-
-         /////////////////// */
+	
+	/* Pseudocode:
+     *  for i from 1 to n:
+     *      ans[i-1] = i * po[i]
+     */
+	public static double[] derivative(double[] po) {
+		if (po == null || po.length == 0) return new double[]{0.0};
+		if (po.length == 1) return new double[]{0.0}; 
+		double[] ans = new double[po.length - 1];
+		for (int i = 1; i < po.length; i++) {
+			ans[i - 1] = i * po[i];
+		}
 		return ans;
 	}
+
 }
